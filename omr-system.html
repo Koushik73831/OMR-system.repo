@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMR Evaluation System - Automated Scoring Platform</title>
+  <meta name="description" content="Advanced optical mark recognition system for automated evaluation and scoring of multiple choice answer sheets.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>OMR Evaluation System</h1>
+      <p>Automated scoring platform for educational assessments</p>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main id="dashboard">
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Answer Key Setup</h2>
+            <p class="card-description">Create and manage answer keys for your tests</p>
+          </div>
+          <button class="btn btn-primary" onclick="showSection('answer-key')">Setup Answer Key</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Upload OMR Sheets</h2>
+            <p class="card-description">Upload student answer sheets for evaluation</p>
+          </div>
+          <button class="btn btn-secondary" onclick="showSection('upload')">Upload Sheets</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">View Results</h2>
+            <p class="card-description">Analyze student performance and export results</p>
+          </div>
+          <button class="btn btn-success" onclick="showSection('results')">View Results</button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="card">
+        <h3 class="card-title">Quick Statistics</h3>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value" id="total-sheets">0</div>
+            <div class="stat-label">Total Sheets</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="avg-score">0%</div>
+            <div class="stat-label">Average Score</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="completion-rate">0%</div>
+            <div class="stat-label">Completion Rate</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Answer Key Section -->
+    <section id="answer-key" class="hidden">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Create Answer Key</h2>
+          <button class="btn btn-outline" onclick="showSection('dashboard')">Back to Dashboard</button>
+        </div>
+        <form id="answer-key-form">
+          <div class="form-group">
+            <label class="label" for="test-name">Test Name</label>
+            <input type="text" id="test-name" class="input" placeholder="Enter test name" required>
+          </div>
+          <div class="form-group">
+            <label class="label" for="question-count">Number of Questions</label>
+            <select id="question-count" class="select" onchange="generateQuestions()">
+              <option value="10">10 Questions</option>
+              <option value="20">20 Questions</option>
+              <option value="30">30 Questions</option>
+              <option value="50">50 Questions</option>
+              <option value="100">100 Questions</option>
+            </select>
+          </div>
+          <div id="questions-grid" class="grid grid-2"></div>
+          <button type="submit" class="btn btn-primary">Save Answer Key</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="hidden">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Upload OMR Sheets</h2>
+          <button class="btn btn-outline" onclick="showSection('dashboard')">Back to Dashboard</button>
+        </div>
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+          <h3>Drop OMR sheets here or click to upload</h3>
+          <p class="card-description">Supports PDF, PNG, JPG files</p>
+          <input type="file" id="file-input" multiple accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFiles(this.files)">
+        </div>
+        <div id="file-list" class="hidden">
+          <h3 class="card-title">Uploaded Files</h3>
+          <div id="files-container"></div>
+          <button class="btn btn-primary" onclick="processSheets()">Process Sheets</button>
+        </div>
+        <div id="processing" class="hidden">
+          <h3 class="card-title">Processing...</h3>
+          <div class="progress"><div class="progress-bar" id="progress-bar" style="width: 0%"></div></div>
+          <p id="progress-text">Initializing...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="hidden">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Evaluation Results</h2>
+          <div style="display:flex;gap:1rem;">
+            <button class="btn btn-success" onclick="exportResults()">Export CSV</button>
+            <button class="btn btn-outline" onclick="showSection('dashboard')">Back</button>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-value" id="results-total">0</div><div class="stat-label">Students</div></div>
+          <div class="stat"><div class="stat-value" id="results-avg">0%</div><div class="stat-label">Average Score</div></div>
+          <div class="stat"><div class="stat-value" id="results-highest">0%</div><div class="stat-label">Highest Score</div></div>
+          <div class="stat"><div class="stat-value" id="results-lowest">0%</div><div class="stat-label">Lowest Score</div></div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Student ID</th><th>Name</th><th>Score</th><th>Percentage</th><th>Grade</th><th>Status</th></tr></thead>
+          <tbody id="results-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
