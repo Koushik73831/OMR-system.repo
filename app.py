@@ -20,7 +20,7 @@ def home():
     return jsonify({"status": "OMR Backend running"})
 
 
-# ✅ Save Answer Key
+#Save Answer Key
 @app.route("/save-answer-key", methods=["POST"])
 def save_answer_key():
     data = request.json
@@ -40,7 +40,7 @@ def save_answer_key():
     })
 
 
-# ✅ Upload Sheets
+#Upload Sheets
 @app.route("/upload-sheets", methods=["POST"])
 def upload_sheets():
     if "files" not in request.files:
@@ -122,3 +122,4 @@ def process_sheets():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
